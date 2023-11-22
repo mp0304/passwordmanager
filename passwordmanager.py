@@ -22,7 +22,7 @@ class passwordManager:
         with open(path, 'r') as f:
             for line in f:
                 site, encrypted = line.split(":")
-                self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode
+                self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
     def add_password(self, site, password):
         self.password_dict[site] = password
         if self.password_file is not None:
@@ -40,7 +40,7 @@ def main():
         "foobar": "bleh"
         }
     pm = passwordManager()
-    print("""What do you want to do?
+    menu =("""What do you want to do?
     (1) Generate a new key
     (2) Load an exisiting key
     (3) Create a new password file
@@ -49,6 +49,7 @@ def main():
     (6) Get a password
     (q) Quit
 """)
+    print(menu)
     done = False
     while not done:
         choice = input("Enter your choice: ")
@@ -60,18 +61,48 @@ def main():
                 print()
                 path = input("Enter the path you want your key to be generated to: ")
                 pm.create_key(path)
+                print()
+                print(menu)
             case '2':
                 print()
                 path = input("Enter the path you want your key to be loaded from: ")
                 pm.load_key(path)
+                print()
+                print(menu)
             case '3':
                 print()
                 path = input("Enter the path you want your file to be created in: ")
                 pm.create_password_file(path, password)
+                print()
+                print(menu)
             case '4':
                 print()
                 path = input("Enter the path you want your file to be loaded from: ")
                 pm.load_password_file(path)
-                #test
-            
-            
+                print()
+                print(menu)
+            case '5':
+                print()
+                site=input("Enter the site: ")
+                password = input("Enter the password: ")
+                pm.add_password(site,password)
+                print()
+                print(menu) 
+            case '6':
+                print()
+                site = input("Enter site that you want the password for: ")
+                print(f"***Password for {site} is {pm.get_password(site)} ***")
+                print()
+                print(menu)
+            case 'q':
+                done = True
+                print("Goodbye!")
+            case _:
+                print()
+                print("Invalid Option!")
+                print()
+                print(menu)
+if __name__ == "__main__":
+    main()
+
+                
